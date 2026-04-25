@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reformer Pilates – Personnalisation 3D</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header id="header">
+      <div class="brand">
+        <span class="brand-icon">◈</span>
+        <span class="brand-name">Pilates Studio</span>
+      </div>
+      <div class="header-title">
+        <h1>Reformer Studio</h1>
+        <p>Configurateur 3D</p>
+      </div>
+      <div class="header-actions">
+        <button id="btn-reset" class="btn-secondary">Réinitialiser</button>
+        <button id="btn-quote" class="btn-primary">Demander un devis</button>
+      </div>
+    </header>
+
+    <!-- Main layout -->
+    <div id="main">
+      <!-- 3D Viewport -->
+      <div id="viewport">
+        <canvas id="canvas"></canvas>
+
+        <!-- View controls -->
+        <div id="view-controls">
+          <button class="view-btn active" data-view="perspective" title="Vue perspective">⬡</button>
+          <button class="view-btn" data-view="front" title="Vue de face">▬</button>
+          <button class="view-btn" data-view="side" title="Vue de côté">▮</button>
+          <button class="view-btn" data-view="top" title="Vue de dessus">▪</button>
+        </div>
+
+        <!-- Orbit hint -->
+        <div id="orbit-hint">
+          <span>Clic + glisser pour tourner · Molette pour zoomer</span>
+        </div>
+
+        <!-- Loading overlay -->
+        <div id="loading">
+          <div class="loader-ring"></div>
+          <p>Chargement du modèle 3D…</p>
+        </div>
+      </div>
+
+      <!-- Configuration Panel -->
+      <aside id="panel">
+        <div id="panel-scroll">
+
+          <!-- Summary badge -->
+          <div id="config-summary">
+            <div class="summary-item">
+              <span class="summary-label">Bois</span>
+              <span id="summary-wood" class="summary-value">Érable naturel</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Revêtement</span>
+              <span id="summary-upholstery" class="summary-value">Noir</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Métal</span>
+              <span id="summary-metal" class="summary-value">Noir mat</span>
+            </div>
+          </div>
+
+          <!-- Section: Frame / Wood -->
+          <section class="config-section">
+            <h2 class="section-title">
+              <span class="section-icon">🪵</span>
+              Finition du cadre
+            </h2>
+            <div class="option-grid" id="wood-options">
+              <button class="option-card active" data-group="wood" data-value="maple"
+                data-label="Érable naturel">
+                <div class="swatch" style="background: linear-gradient(135deg,#e8c98a,#c8973d)"></div>
+                <span>Érable naturel</span>
+              </button>
+              <button class="option-card" data-group="wood" data-value="walnut"
+                data-label="Noyer foncé">
+                <div class="swatch" style="background: linear-gradient(135deg,#6b4226,#3d2011)"></div>
+                <span>Noyer foncé</span>
+              </button>
+              <button class="option-card" data-group="wood" data-value="white"
+                data-label="Blanc laqué">
+                <div class="swatch" style="background: linear-gradient(135deg,#f5f5f5,#d8d8d8)"></div>
+                <span>Blanc laqué</span>
+              </button>
+              <button class="option-card" data-group="wood" data-value="black_wood"
+                data-label="Ébène">
+                <div class="swatch" style="background: linear-gradient(135deg,#2a2a2a,#111)"></div>
+                <span>Ébène</span>
+              </button>
+              <button class="option-card" data-group="wood" data-value="ash"
+                data-label="Frêne gris">
+                <div class="swatch" style="background: linear-gradient(135deg,#b0a090,#7a6e62)"></div>
+                <span>Frêne gris</span>
+              </button>
+              <button class="option-card" data-group="wood" data-value="cherry"
+                data-label="Cerisier">
+                <div class="swatch" style="background: linear-gradient(135deg,#a05030,#6a2e10)"></div>
+                <span>Cerisier</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Section: Upholstery -->
+          <section class="config-section">
+            <h2 class="section-title">
+              <span class="section-icon">🛋️</span>
+              Revêtement (chariot & repose-tête)
+            </h2>
+            <div class="option-grid" id="upholstery-options">
+              <button class="option-card active" data-group="upholstery" data-value="black"
+                data-label="Noir">
+                <div class="swatch" style="background:#1a1a1a"></div>
+                <span>Noir</span>
+              </button>
+              <button class="option-card" data-group="upholstery" data-value="charcoal"
+                data-label="Anthracite">
+                <div class="swatch" style="background:#3d3d3d"></div>
+                <span>Anthracite</span>
+              </button>
+              <button class="option-card" data-group="upholstery" data-value="gray"
+                data-label="Gris perle">
+                <div class="swatch" style="background:#9a9a9a"></div>
+                <span>Gris perle</span>
+              </button>
+              <button class="option-card" data-group="upholstery" data-value="beige"
+                data-label="Beige">
+                <div class="swatch" style="background:#c8b49a"></div>
+                <span>Beige</span>
+              </button>
+              <button class="option-card" data-group="upholstery" data-value="navy"
+                data-label="Marine">
+                <div class="swatch" style="background:#1a2a4a"></div>
+                <span>Marine</span>
+              </button>
+              <button class="option-card" data-group="upholstery" data-value="burgundy"
+                data-label="Bordeaux">
+                <div class="swatch" style="background:#5a1020"></div>
+                <span>Bordeaux</span>
+              </button>
+              <button class="option-card" data-group="upholstery" data-value="sage"
+                data-label="Sauge">
+                <div class="swatch" style="background:#7a9a7a"></div>
+                <span>Sauge</span>
+              </button>
+              <button class="option-card" data-group="upholstery" data-value="cream"
+                data-label="Crème">
+                <div class="swatch" style="background:#ede0c8"></div>
+                <span>Crème</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Section: Metal / Hardware -->
+          <section class="config-section">
+            <h2 class="section-title">
+              <span class="section-icon">⚙️</span>
+              Métal & quincaillerie
+            </h2>
+            <div class="option-grid" id="metal-options">
+              <button class="option-card active" data-group="metal" data-value="matte_black"
+                data-label="Noir mat">
+                <div class="swatch" style="background:radial-gradient(circle at 30% 30%,#3a3a3a,#111)"></div>
+                <span>Noir mat</span>
+              </button>
+              <button class="option-card" data-group="metal" data-value="chrome"
+                data-label="Chrome">
+                <div class="swatch" style="background:radial-gradient(circle at 30% 30%,#e8e8e8,#888)"></div>
+                <span>Chrome</span>
+              </button>
+              <button class="option-card" data-group="metal" data-value="gold"
+                data-label="Or brossé">
+                <div class="swatch" style="background:radial-gradient(circle at 30% 30%,#e0c060,#a07820)"></div>
+                <span>Or brossé</span>
+              </button>
+              <button class="option-card" data-group="metal" data-value="rose_gold"
+                data-label="Or rose">
+                <div class="swatch" style="background:radial-gradient(circle at 30% 30%,#e8b090,#c07850)"></div>
+                <span>Or rose</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Section: Springs -->
+          <section class="config-section">
+            <h2 class="section-title">
+              <span class="section-icon">🔧</span>
+              Ressorts
+            </h2>
+            <div class="option-grid" id="spring-options">
+              <button class="option-card active" data-group="spring" data-value="standard"
+                data-label="Standard (5 ressorts)">
+                <div class="swatch spring-swatch">
+                  <span class="spring-count">5</span>
+                </div>
+                <span>Standard (5)</span>
+              </button>
+              <button class="option-card" data-group="spring" data-value="pro"
+                data-label="Pro (6 ressorts)">
+                <div class="swatch spring-swatch">
+                  <span class="spring-count">6</span>
+                </div>
+                <span>Pro (6)</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- CTA -->
+          <div id="panel-cta">
+            <div class="price-estimate">
+              <span class="price-label">Estimation</span>
+              <span id="price-value" class="price-amount">3 490 €</span>
+            </div>
+            <button id="btn-quote-2" class="btn-primary btn-full">
+              Demander un devis personnalisé
+            </button>
+            <button id="btn-screenshot" class="btn-secondary btn-full">
+              Télécharger ma configuration
+            </button>
+          </div>
+
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Quote Modal -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal">
+      <button id="modal-close">✕</button>
+      <h2>Votre configuration personnalisée</h2>
+      <div id="modal-config-display"></div>
+      <form id="quote-form">
+        <div class="form-row">
+          <input type="text" name="name" placeholder="Nom *" required />
+          <input type="email" name="email" placeholder="Email *" required />
+        </div>
+        <input type="tel" name="phone" placeholder="Téléphone" />
+        <textarea name="message" rows="3" placeholder="Message ou questions…"></textarea>
+        <button type="submit" class="btn-primary btn-full">Envoyer ma demande</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Three.js from CDN -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

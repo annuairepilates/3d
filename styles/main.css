@@ -1,0 +1,333 @@
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0f0f0f;
+  --surface:     #1a1a1a;
+  --surface2:    #232323;
+  --border:      #2e2e2e;
+  --accent:      #c8973d;
+  --accent-dim:  #9a7030;
+  --text:        #e8e8e8;
+  --text-muted:  #888;
+  --panel-w:     340px;
+  --header-h:    56px;
+  --radius:      10px;
+  --radius-sm:   6px;
+  --transition:  .2s ease;
+}
+
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 14px; }
+
+/* ── App layout ── */
+#app { display: flex; flex-direction: column; height: 100vh; }
+
+/* ── Header ── */
+#header {
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--accent); }
+.brand-icon { font-size: 20px; }
+.brand-name { font-size: 16px; letter-spacing: .05em; }
+
+.header-title { flex: 1; text-align: center; }
+.header-title h1 { font-size: 15px; font-weight: 600; color: var(--text); }
+.header-title p  { font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: .1em; }
+
+.header-actions { display: flex; gap: 8px; }
+
+/* ── Buttons ── */
+.btn-primary, .btn-secondary {
+  padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none; transition: var(--transition);
+}
+.btn-primary   { background: var(--accent); color: #1a1000; }
+.btn-primary:hover { background: #dba840; }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border); }
+.btn-full { width: 100%; padding: 12px; font-size: 14px; }
+
+/* ── Main (viewport + panel) ── */
+#main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ── Viewport ── */
+#viewport {
+  flex: 1;
+  position: relative;
+  background: radial-gradient(ellipse at 50% 40%, #1e2030 0%, #0a0a0f 100%);
+  overflow: hidden;
+}
+
+#canvas { display: block; width: 100%; height: 100%; }
+
+/* ── View controls ── */
+#view-controls {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.view-btn {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex; align-items: center; justify-content: center;
+}
+.view-btn:hover, .view-btn.active {
+  background: rgba(200,151,61,.2);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Orbit hint ── */
+#orbit-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.5);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 11px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: opacity .5s;
+}
+#orbit-hint.fade-out { opacity: 0; }
+
+/* ── Loading ── */
+#loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: radial-gradient(ellipse at 50% 40%, #1e2030 0%, #0a0a0f 100%);
+  z-index: 5;
+  transition: opacity .4s;
+}
+#loading.done { opacity: 0; pointer-events: none; }
+
+.loader-ring {
+  width: 48px; height: 48px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loading p { font-size: 13px; color: var(--text-muted); }
+
+/* ── Panel ── */
+#panel {
+  width: var(--panel-w);
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+#panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* ── Config summary ── */
+#config-summary {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.summary-item { display: flex; justify-content: space-between; align-items: center; }
+.summary-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: .06em; }
+.summary-value { font-size: 13px; font-weight: 500; color: var(--accent); }
+
+/* ── Config sections ── */
+.config-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.section-icon { font-size: 15px; }
+
+/* ── Option grid ── */
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.option-card {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.option-card:hover {
+  border-color: rgba(200,151,61,.5);
+  background: rgba(200,151,61,.06);
+  color: var(--text);
+}
+.option-card.active {
+  border-color: var(--accent);
+  background: rgba(200,151,61,.12);
+  color: var(--text);
+}
+
+.swatch {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.15);
+  flex-shrink: 0;
+}
+
+.spring-swatch {
+  background: linear-gradient(135deg,#888,#555);
+  display: flex; align-items: center; justify-content: center;
+}
+.spring-count {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── Panel CTA ── */
+#panel-cta {
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.price-estimate {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.price-label  { font-size: 12px; color: var(--text-muted); }
+.price-amount { font-size: 22px; font-weight: 700; color: var(--accent); }
+
+/* ── Modal ── */
+#modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+#modal-overlay.hidden { display: none; }
+
+#modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  width: 420px;
+  max-width: calc(100vw - 32px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+#modal h2 { font-size: 17px; font-weight: 600; }
+#modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: none; color: var(--text-muted); font-size: 18px;
+  cursor: pointer; line-height: 1;
+}
+
+#modal-config-display {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--text);
+}
+
+.form-row { display: flex; gap: 8px; }
+#quote-form input, #quote-form textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition);
+}
+#quote-form input:focus, #quote-form textarea:focus {
+  border-color: var(--accent);
+}
+#quote-form textarea { resize: vertical; }
+#quote-form { display: flex; flex-direction: column; gap: 8px; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  #main { flex-direction: column-reverse; }
+  #panel { width: 100%; max-height: 45vh; border-left: none; border-top: 1px solid var(--border); }
+  .option-grid { grid-template-columns: repeat(3, 1fr); }
+  #viewport { flex: 1; min-height: 200px; }
+  .header-actions .btn-secondary { display: none; }
+}
